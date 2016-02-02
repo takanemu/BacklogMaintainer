@@ -1,0 +1,332 @@
+﻿<#@ assembly name="System.Core.dll" #>
+<#@ assembly name="EnvDTE" #>
+<#@ assembly name="EnvDTE80" #>
+<#@ import Namespace="EnvDTE" #>
+<#@ import Namespace="EnvDTE80" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#+ 
+	/// <summary>
+	/// ソリューション中の全てのプロジェクトを取得して返します
+	/// </summary>
+	 /// <returns>IEnumerable<Project></returns>
+	public IEnumerable<Project> FindAllProjects()
+	{
+		EnvDTE.DTE dte = GetDTE();
+		foreach (EnvDTE.Project p in dte.Solution.Projects)
+		{
+			yield return p;
+		}
+	}
+	/// <summary>
+	/// ソリューション中から条件にあったプロジェクト情報を抜き出します
+	/// </summary>
+	/// <param name="match"></param>
+	/// <returns></returns>
+	public IEnumerable<Project> FindAllProjects(Predicate<Project> match)
+	{
+		EnvDTE.DTE dte = GetDTE();
+		foreach (EnvDTE.Project p in dte.Solution.Projects)
+		{
+			if (match(p))
+				yield return p;
+		}
+	}
+	/// <summary>
+	/// テンプレートが属しているプロジェクト情報を探して返します
+	/// </summary>
+	/// <returns>Project</returns>
+	public Project FindProjectHost()
+	{
+		var dte = GetDTE();
+		EnvDTE.ProjectItem containingProjectItem = dte.Solution.FindProjectItem(Host.TemplateFile);
+		Project project = containingProjectItem.ContainingProject;
+		return project;
+	}
+	/// <summary>
+	/// DTE情報を取得します
+	/// </summary>
+	/// <returns></returns>
+	public EnvDTE.DTE GetDTE()
+	{
+		IServiceProvider hostServiceProvider = (IServiceProvider)Host;
+		return (EnvDTE.DTE)hostServiceProvider.GetService(typeof(EnvDTE.DTE));
+	}             
+	
+	/// <summary>
+	/// CodeElementから文字列を取得します
+	/// </summary>
+	public string GetElementText(CodeElement element)
+	{
+		var sp = element.GetStartPoint();
+		var ep = element.GetEndPoint();
+		var edit = sp.CreateEditPoint();
+		return edit.GetText(ep);
+	}
+
+	/// <summary>
+	/// クラス情報からCodeAttributes情報を列挙します
+	/// </summary>
+	public IEnumerable<CodeAttribute> Attributes(CodeClass codeClass)
+	{
+		foreach(CodeElement element in codeClass.Attributes)
+		{
+			yield return (CodeAttribute)element;
+		}
+	}
+
+	/// <summary>
+	/// クラス情報からCodeElementを列挙します
+	/// </summary>
+	public IEnumerable<CodeElement> Members(CodeClass codeClass)
+	{
+		foreach(CodeElement element in codeClass.Members)
+		{
+			yield return element;
+		}
+	}
+
+	/// <summary>
+	/// プロジェクトからProjectItemを列挙します
+	/// </summary>
+	public IEnumerable<ProjectItem> GetProjectItems(Project project)
+	{
+		foreach(ProjectItem projectItem in project.ProjectItems)
+		{
+			yield return projectItem;
+			foreach(ProjectItem descendantItem in GetDescendantItems(projectItem))
+			{
+			   yield return descendantItem;
+			}
+		}
+	}
+
+	/// <summary>
+	/// ProjectItemの子のProjectItemを列挙します
+	/// </summary>
+	public IEnumerable<ProjectItem> GetDescendantItems(ProjectItem projectItem)
+	{    
+		if (projectItem.ProjectItems != null)
+		{
+			foreach (ProjectItem childItem in projectItem.ProjectItems)
+			{
+				yield return childItem;
+
+				foreach(ProjectItem descendantItem in GetDescendantItems(childItem))
+				{
+					yield return descendantItem;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// ProjectItem中のCodeElementを列挙します
+	/// </summary>
+	public IEnumerable<CodeElement> GetCodeElements(ProjectItem projectItem)
+	{
+		FileCodeModel fileCodeModel = projectItem.FileCodeModel;
+			
+		if (fileCodeModel != null)
+		{
+			foreach (CodeElement codeElement in fileCodeModel.CodeElements)
+			{
+				foreach(CodeElement el in CodeElementDescendantsAndSelf(codeElement))
+				{
+					yield return el;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// CodeElementの子のCodeElementを列挙します
+	/// </summary>
+	public IEnumerable<CodeElement> CodeElementsDescendants(CodeElements codeElements)
+	{
+		foreach(CodeElement element in codeElements)
+		{
+			foreach (CodeElement descendant in CodeElementDescendantsAndSelf(element))
+			{
+				yield return descendant;                
+			}
+		}
+	}
+
+	/// <summary>
+	/// 自身の配下のCodeElementを取得します
+	/// </summary>
+	/// <param name="codeElement"></param>
+	/// <returns></returns>
+	public IEnumerable<CodeElement> CodeElementDescendantsAndSelf(CodeElement codeElement)
+	{
+		yield return codeElement;
+	
+		CodeElements codeElements;
+			
+		switch(codeElement.Kind)
+		{        
+	
+			/* namespaces */
+			case vsCMElement.vsCMElementNamespace:
+			{
+				CodeNamespace codeNamespace = (CodeNamespace)codeElement;
+				codeElements = codeNamespace.Members;
+				foreach(CodeElement descendant in CodeElementsDescendants(codeElements))
+				{
+					yield return descendant;
+				}
+				break;
+			}
+		
+			/* Process classes */
+			case vsCMElement.vsCMElementClass:
+			{            
+				CodeClass codeClass = (CodeClass)codeElement;
+				codeElements = codeClass.Members;
+				foreach(CodeElement descendant in CodeElementsDescendants(codeElements))
+				{                
+					yield return descendant;
+				}            
+				break;    
+			}
+		
+		}
+	}
+
+	/// <summary>
+	/// 複数のプロジェクトアイテム中からCodeElementを列挙します
+	/// </summary>
+	/// <param name="projectItems"></param>
+	/// <returns></returns>
+	public IEnumerable<CodeElement> CodeElementsInProjectItems(ProjectItems projectItems)
+	{
+		foreach (ProjectItem projectItem in projectItems)
+		{
+			foreach (CodeElement el in CodeElementsInProjectItem(projectItem))
+			{
+				yield return el;
+			}
+		}
+	}
+
+	/// <summary>
+	/// プロジェクトアイテム中からCodeElementを列挙します
+	/// </summary>
+	/// <param name="projectItems"></param>
+	/// <returns></returns>
+	public IEnumerable<CodeElement> CodeElementsInProjectItem(ProjectItem projectItem)
+	{
+		FileCodeModel fileCodeModel = projectItem.FileCodeModel;
+		if (fileCodeModel != null)
+		{
+			foreach (CodeElement codeElement in fileCodeModel.CodeElements)
+			{
+				//WalkElements(codeElement, null);
+				foreach (CodeElement el in CodeElementDescendantsAndSelf(codeElement))
+				{
+					yield return el;
+				}
+			}
+		}
+		if (projectItem.ProjectItems != null)
+		{
+			foreach (ProjectItem childItem in projectItem.ProjectItems)
+			{
+				foreach (CodeElement el in CodeElementsInProjectItem(childItem))
+				{
+					yield return el;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// CodeAttributeからCodeAttributeArgumentの列挙を取得します
+	/// </summary>
+	/// <param name="codeAttribute"></param>
+	/// <returns>EnvDTE80.CodeAttributeArgument</returns>
+	public IEnumerable<EnvDTE80.CodeAttributeArgument> CodeAttributeArgumentInCodeAttribute(CodeAttribute codeAttribute)
+	{
+		foreach (CodeElement child in codeAttribute.Children)
+		{
+			yield return (EnvDTE80.CodeAttributeArgument)child;
+		}
+	}
+
+	/// <summary>
+	/// ファイルを保存してプロジェクトに追加します
+	/// </summary>
+	public void SaveOutput(string outputFileName, Project project)
+	{
+		//生成したコードをファイルに書き出す
+		string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+		string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+
+		using(StreamWriter writer = new StreamWriter(outputFilePath, true, System.Text.Encoding.UTF8))
+		{
+			writer.Write(this.GenerationEnvironment.ToString());
+			writer.Close();
+		}
+
+		//生成したコードを一旦クリアする
+		this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+
+		//プロジェクトに追加する
+		project.ProjectItems.AddFromFile(outputFilePath);
+	}
+
+	/// <summary>
+	/// 指定クラスの基底クラスとインターフェースを取得する
+	/// </summary>
+	public string GetBaseInterface(CodeClass clazz)
+	{
+		string baseInterface = "";
+		CodeElements bases = clazz.Bases;
+
+		foreach (CodeElement baseitem in bases)
+		{
+			if(string.IsNullOrEmpty(baseInterface))
+			{
+				baseInterface = " : ";
+			}
+			if(baseInterface.Length > 3)
+			{
+				baseInterface += ", ";
+			}
+			baseInterface += baseitem.FullName;
+		}
+		CodeElements implements = clazz.ImplementedInterfaces;
+
+		foreach (CodeInterface implemented in implements)
+		{
+			if(string.IsNullOrEmpty(baseInterface))
+			{
+				baseInterface = " : ";
+			}
+			if(baseInterface.Length > 3)
+			{
+				baseInterface += ", ";
+			}
+			baseInterface += implemented.FullName;
+		}
+		return baseInterface;
+	}
+
+	/// <summary>
+	/// クラスのアクセス属性列挙型を文字列へ変換する
+	/// </summary>
+	public string ConvVsCMAccess2String(vsCMAccess access)
+	{
+		string result = "internal";
+
+		switch(access)
+		{
+			case vsCMAccess.vsCMAccessPublic:
+				result = "public";
+				break;
+		}
+		return result;
+	}
+#>

@@ -1,0 +1,460 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CSJSONBacklog</name>
+    </assembly>
+    <members>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetIssuesCount(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns number of issues.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issues-count"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetIssue(System.String)">
+            <summary>
+            Returns information about issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issue"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetIssues(CSJSONBacklog.Model.Issues.IssueQuery)">
+            <summary>
+            Returns list of issues.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issues"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.UpdateIssue(CSJSONBacklog.Model.Issues.Issue)">
+            <summary>
+            Updates information about issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/update-issue"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetCommentList(System.String,CSJSONBacklog.Model.Issues.CommentQuery)">
+            <summary>
+            Returns list of comments in issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-comments"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetStatusList">
+            <summary>
+            Returns list of statuses.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-status"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetResolutionList">
+            <summary>
+            Returns list of resolutions.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-resolutions"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.GetPriorityList">
+            <summary>
+            Returns list of priorities.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-priorities"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectList">
+            <summary>
+            Returns list of projects.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-projects"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProject(System.String)">
+            <summary>
+            Returns information about project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetVersionList(System.String)">
+            <summary>
+            Returns list of Versions in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-versions"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetCategoryList(System.String)">
+            <summary>
+            Returns list of Categories in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-categories"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectUserList(System.String)">
+            <summary>
+            Returns list of project members.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-users"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetWikiPageList(System.String)">
+            <summary>
+            Returns list of Wiki pages.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-wikis"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetWikiPage(System.String,System.Int32)">
+            <summary>
+            Returns information about Wiki page.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-wiki"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectAdministratorList(System.String)">
+            <summary>
+            Returns list of users who has Project Administrator role
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-adminnistrators"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectIcon">
+            <summary>
+            Downloads project icon.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-icon"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectRecentUpdates(System.String)">
+            <summary>
+            Returns recent update in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-activities"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetListofRecentlyViewedProjects">
+            <summary>
+            Returns list of projects which the user viewed recently.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-user-recentlyviewedprojects"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetCustomFieldList(System.String)">
+            <summary>
+            Returns list of Custom Fields in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-customfields"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetIssueTypeList(System.String)">
+            <summary>
+            Returns list of Issue Types in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issuetypes"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectDiskUsage(System.String)">
+            <summary>
+            Returns information about project disk usage.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-diskusage"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetListofGitRepositories(System.String)">
+            <summary>
+            Returns list of Git repositories.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-git-repositories"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.ISpaceAPI.GetSpace">
+            <summary>
+            Returns information about your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-space"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.ISpaceAPI.GetUserList">
+            <summary>
+            Returns list of users in your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-users"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.ISpaceAPI.GetGroupList">
+            <summary>
+            Returns list of groups in your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/v2/groups"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetIssuesCount(System.Int32)">
+            <summary>
+            Returns number of issues.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issues-count"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetIssuesCount(System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Returns number of issues.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issues-count"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetIssue(System.String)">
+            <summary>
+            Returns information about issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issue"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetIssues(CSJSONBacklog.Model.Issues.IssueQuery)">
+            <summary>
+            Returns list of issues.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issues"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.UpdateIssue(CSJSONBacklog.Model.Issues.Issue)">
+            <summary>
+            Updates information about issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/update-issue"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetCommentList(System.String,CSJSONBacklog.Model.Issues.CommentQuery)">
+            <summary>
+            Returns list of comments in issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-comments"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetCommentList(System.String)">
+            <summary>
+            Returns list of comments in issue.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-comments"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetStatusList">
+            <summary>
+            Returns list of statuses.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-status"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetResolutionList">
+            <summary>
+            Returns list of resolutions.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-resolutions"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetPriorityList">
+            <summary>
+            Returns list of priorities.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-priorities"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectList">
+            <summary>
+            Returns list of projects.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-projects"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProject(System.String)">
+            <summary>
+            Returns information about project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetVersionList(System.String)">
+            <summary>
+            Returns list of Versions in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-versions"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetCategoryList(System.String)">
+            <summary>
+            Returns list of Categories in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-categories"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectUserList(System.String)">
+            <summary>
+            Returns list of project members.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-users"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetWikiPageList(System.String)">
+            <summary>
+            Returns list of Wiki pages.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-wikis"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetWikiPage(System.String,System.Int32)">
+            <summary>
+            Returns information about Wiki page.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-wiki"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectAdministratorList(System.String)">
+            <summary>
+            Returns list of users who has Project Administrator role
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-adminnistrators"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectIcon">
+            <summary>
+            Downloads project icon.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-icon"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectRecentUpdates(System.String)">
+            <summary>
+            Returns recent update in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-activities"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetListofRecentlyViewedProjects">
+            <summary>
+            Returns list of projects which the user viewed recently.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-user-recentlyviewedprojects"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetCustomFieldList(System.String)">
+            <summary>
+            Returns list of Custom Fields in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-customfields"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetIssueTypeList(System.String)">
+            <summary>
+            Returns list of Issue Types in the project.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issuetypes"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectDiskUsage(System.String)">
+            <summary>
+            Returns information about project disk usage.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-diskusage"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetListofGitRepositories(System.String)">
+            <summary>
+            Returns list of Git repositories.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-git-repositories"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.SpaceCommunicator.GetSpace">
+            <summary>
+            Returns information about your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-space"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.SpaceCommunicator.GetUserList">
+            <summary>
+            Returns list of users in your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-users"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.SpaceCommunicator.GetGroupList">
+            <summary>
+            Returns list of groups in your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/v2/groups"/>
+        </member>
+        <member name="M:CSJSONBacklog.Model.Extensions.EnumerableEqualityExtension.ScrambledEquals``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Compare two Enumerable objects for equality
+            </summary>
+            <see cref="!:http://stackoverflow.com/questions/3669970/compare-two-listt-objects-for-equality-ignoring-order"/>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.Attachment">
+            <summary>
+            Attachment
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.CommentQuery">
+            <summary>
+            Query Parameters - Get Comment List
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-comments"/>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Issues.CommentQuery.minId">
+            <summary>
+            minimum ID
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Issues.CommentQuery.maxId">
+            <summary>
+            maximum ID
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Issues.CommentQuery.count">
+            <summary>
+            number of records to retrieve(1-100) default=20
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Issues.CommentQuery.order">
+            <summary>
+            "asc" or "desc" default="desc"
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.CustomFieldInIssue">
+            <summary>
+            CustomFieldInIssue
+            </summary>
+        </member>
+        <member name="M:CSJSONBacklog.Model.Issues.CustomFieldInIssue.PatchPropertyNames">
+            <summary>
+            return properties for Patch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.Issue">
+            <summary>
+            Issue
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/add-issue"/>
+        </member>
+        <member name="M:CSJSONBacklog.Model.Issues.Issue.PatchPropertyNames">
+            <summary>
+            return properties for Patch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.CountValue">
+            <summary>
+            CountValue - Number of int.
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.IssueType">
+            <summary>
+            IssueType
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.SharedFile">
+            <summary>
+            SharedFile
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.Star">
+            <summary>
+            Star
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Issues.Status">
+            <summary>
+            Status
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-status"/>
+        </member>
+        <member name="M:CSJSONBacklog.Model.Projects.CustomFieldItem.PatchPropertyNames">
+            <summary>
+            return properties for Patch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Projects.Project">
+            <summary>
+            Project
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/add-project"/>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Projects.TestFormattingRule">
+            <summary>
+            TestFormattingRule
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/add-project"/>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Projects.Version">
+            <summary>
+            Version(Milestone)
+            </summary>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Space.GitRepository">
+            <summary>
+            Git Repository
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-git-repositories"/>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Space.User">
+            <summary>
+            User
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/add-user"/>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Space.RoleType">
+            <summary>
+            <para>RoleType</para>
+            <para>Administrator(1) Normal User(2) Reporter(3) Viewer(4) Guest Reporter(5) Guest Viewer(6)</para>
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/add-user"/>
+        </member>
+    </members>
+</doc>

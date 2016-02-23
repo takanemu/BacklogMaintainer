@@ -1,4 +1,5 @@
 ﻿using BacklogMaintainer.ViewModel;
+using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
 
@@ -53,6 +54,13 @@ namespace BacklogMaintainer
                 // 設定保存
                 Properties.Settings.Default.Save();
             };
+        }
+
+        private async void Refresh(object sender, RoutedEventArgs e)
+        {
+            this._viewModel.IsBusy = true;
+            await this._viewModel.DoLoad();
+            this._viewModel.IsBusy = false;
         }
     }
 }

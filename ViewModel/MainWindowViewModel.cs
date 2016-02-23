@@ -34,6 +34,14 @@ namespace BacklogMaintainer.ViewModel
 
         public async Task DoLoad()
         {
+            // 初期化
+            this.Users.Clear();
+            this.Groups.Clear();
+            this.InactiveProjexts.Clear();
+            this.RevivalProjexts.Clear();
+            this.DeathProjexts.Clear();
+
+            // ユーザーデータ取得
             var users = await this.GetSpaceUsers();
             var userdic = new Dictionary<string, User>();
             var counter = new Dictionary<string, int>();

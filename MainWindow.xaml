@@ -38,20 +38,32 @@
         </Canvas>
     </Controls:MetroWindow.Resources>
 
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands ShowLastSeparator="False">
-            <Button Click="Refresh" ToolTip="Refresh">
-                <Rectangle Width="22"
-                           Height="22"
-                           Fill="{Binding RelativeSource={RelativeSource AncestorType=Button},
-                                          Path=Foreground}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_refresh}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
-            </Button>
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl x:Name="flyoutsControl">
+            <Controls:Flyout Position="Bottom" TitleVisibility="Collapsed">
+                <StackPanel Height="80"
+                            Margin="5,5,5,5"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <Button Width="40"
+                            Height="40"
+                            Click="Refresh"
+                            FontFamily="Segoe UI Symbol"
+                            FontSize="16"
+                            Style="{DynamicResource MetroCircleButtonStyle}">
+                        <Rectangle Width="20"
+                                   Height="20"
+                                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button},
+                                                  Path=Foreground}">
+                            <Rectangle.OpacityMask>
+                                <VisualBrush Stretch="Uniform" Visual="{StaticResource appbar_refresh}" />
+                            </Rectangle.OpacityMask>
+                        </Rectangle>
+                    </Button>
+                </StackPanel>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
 
     <Grid>
         <Controls:MetroAnimatedSingleRowTabControl>

@@ -2,6 +2,7 @@
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
+using System.Windows.Input;
 
 namespace BacklogMaintainer
 {
@@ -54,6 +55,14 @@ namespace BacklogMaintainer
                 // 設定保存
                 Properties.Settings.Default.Save();
             };
+            this.PreviewKeyDown += (s, e) => {
+                ModifierKeys modifierKeys = Keyboard.Modifiers;
+
+                if ((modifierKeys & ModifierKeys.Alt) != ModifierKeys.None)
+                {
+                    this.ToggleFlyout(0);
+                }
+            };
         }
 
         private async void Refresh(object sender, RoutedEventArgs e)
@@ -61,6 +70,18 @@ namespace BacklogMaintainer
             this._viewModel.IsBusy = true;
             await this._viewModel.DoLoad();
             this._viewModel.IsBusy = false;
+            this.ToggleFlyout(0);
         }
+
+        private void ToggleFlyout(int index)
+        {
+            var flyout = this.Flyouts.Items[index] as Flyout;
+            if (flyout == null)
+            {
+                return;
+            }
+            flyout.IsOpen = !flyout.IsOpen;
+        }
+
     }
 }

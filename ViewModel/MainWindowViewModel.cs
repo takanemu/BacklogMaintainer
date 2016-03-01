@@ -284,7 +284,14 @@ namespace BacklogMaintainer.ViewModel
 
             await Task.Run(() =>
             {
-                groups = spaceCommunicator.GetGroupList().ToList();
+                var param = new SpaceQuery {
+                    Offset = 0,
+                    Order = CSJSONBacklog.Model.Issues.Order.asc,
+                    Count = 100,
+                };
+                var quary = param.GetParametersForAPI();
+
+                groups = spaceCommunicator.GetGroupList(param).ToList();
             });
             return groups;
         }

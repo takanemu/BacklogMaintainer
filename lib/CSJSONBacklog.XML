@@ -328,6 +328,12 @@
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/v2/groups"/>
         </member>
+        <member name="M:CSJSONBacklog.Communicator.SpaceCommunicator.GetGroupList(CSJSONBacklog.Model.Space.SpaceQuery)">
+            <summary>
+            Returns list of groups in your space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/v2/groups"/>
+        </member>
         <member name="M:CSJSONBacklog.Model.Extensions.EnumerableEqualityExtension.ScrambledEquals``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Compare two Enumerable objects for equality

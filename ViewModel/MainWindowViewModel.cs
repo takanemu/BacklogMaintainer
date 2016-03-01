@@ -16,7 +16,7 @@ namespace BacklogMaintainer.ViewModel
     {
         public string SpaceName { get; set; }
         public string APIKey { get; set; }
-        public IList<User> Users { get; private set; }
+        public IList<UserViewModel> Users { get; private set; }
         public IList<Group> Groups { get; private set; }
         public IList<Project> InactiveProjexts { get; private set; }
         public IList<Project> RevivalProjexts { get; private set; }
@@ -25,7 +25,7 @@ namespace BacklogMaintainer.ViewModel
         public MainWindowViewModel()
         {
             this.IsBusy = false;
-            this.Users = new ObservableCollection<User>();
+            this.Users = new ObservableCollection<UserViewModel>();
             this.Groups = new ObservableCollection<Group>();
             this.InactiveProjexts = new ObservableCollection<Project>();
             this.RevivalProjexts = new ObservableCollection<Project>();
@@ -53,6 +53,7 @@ namespace BacklogMaintainer.ViewModel
                 counter.Add(user.UserId, 0);
             }
 
+            // プロジェクト登録数カウント
             var projects = await this.GetProjects();
             var projectCommunicator = new ProjectCommunicator(this.SpaceName, this.APIKey);
 
@@ -85,9 +86,33 @@ namespace BacklogMaintainer.ViewModel
 
                         if (userdic.TryGetValue(user.UserId, out zerouser))
                         {
-                            this.Users.Add(zerouser);
+                            var adduser = new UserViewModel {
+                                UserId = zerouser.UserId,
+                                MailAddress = zerouser.MailAddress,
+                                Name = zerouser.Name,
+                                Memo = "未登録",
+                            };
+                            this.Users.Add(adduser);
                         }
                     }
+                }
+            }
+
+            // 重複ユーザーの検出
+            foreach (var user in users)
+            {
+                var count = users.Count(o => o.MailAddress == user.MailAddress);
+
+                if(count > 1)
+                {
+                    var adduser = new UserViewModel
+                    {
+                        UserId = user.UserId,
+                        MailAddress = user.MailAddress,
+                        Name = user.Name,
+                        Memo = "重複登録",
+                    };
+                    this.Users.Add(adduser);
                 }
             }
 

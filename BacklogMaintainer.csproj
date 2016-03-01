@@ -95,6 +95,7 @@
     <Compile Include="ViewModel\MainWindowViewModel.generated.cs">
       <DependentUpon>MainWindowViewModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="View\DeathProjextList.xaml.cs">
       <DependentUpon>DeathProjextList.xaml</DependentUpon>
     </Compile>

@@ -12,6 +12,8 @@ namespace BacklogMaintainer.ViewModel
     using System.Threading.Tasks;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "全ユーザー数", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "GroupCount", Type = typeof(int), Comment = "全グループ数", RaisePropertyChanged = true)]
     public partial class MainWindowViewModel : Livet.ViewModel
     {
         public string SpaceName { get; set; }
@@ -52,6 +54,8 @@ namespace BacklogMaintainer.ViewModel
                 userdic.Add(user.UserId, user);
                 counter.Add(user.UserId, 0);
             }
+
+            this.UserCount = users.Count();
 
             // プロジェクト登録数カウント
             var projects = await this.GetProjects();
@@ -118,6 +122,8 @@ namespace BacklogMaintainer.ViewModel
 
             // メンバーの居ないグループ
             var groups = await this.GetSpageGroups();
+
+            this.GroupCount = groups.Count();
 
             foreach (var group in groups)
             {

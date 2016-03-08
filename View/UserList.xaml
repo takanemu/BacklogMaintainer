@@ -13,15 +13,21 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Label Margin="5,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Center"
-               Content="プロジェクト未参加ユーザー" />
+        <Grid Margin="5,0">
+            <Label HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Content="プロジェクト未参加ユーザー" />
+            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center">
+                ユーザー
+                <Run Text="{Binding UserCount}" />
+                人
+            </TextBlock>
+        </Grid>
         <DataGrid x:Name="AzureDataGrid"
                   Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=Users}"
+                  ItemsSource="{Binding Users}"
                   RenderOptions.ClearTypeHint="Enabled"
                   Style="{DynamicResource AzureDataGrid}"
                   TextOptions.TextFormattingMode="Display">

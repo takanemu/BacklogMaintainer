@@ -12,15 +12,20 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Label Margin="5,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Center"
-               Content="メンバーの居ないグループ" />
+        <Grid Margin="5,0">
+            <Label HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   Content="メンバーの居ないグループ" />
+            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center">
+                グループ<Run Text="{Binding GroupCount}" />
+                個
+            </TextBlock>
+        </Grid>
         <DataGrid x:Name="AzureDataGrid"
                   Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=Groups}"
+                  ItemsSource="{Binding Groups}"
                   RenderOptions.ClearTypeHint="Enabled"
                   Style="{DynamicResource AzureDataGrid}"
                   TextOptions.TextFormattingMode="Display">

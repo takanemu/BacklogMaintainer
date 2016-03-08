@@ -31,5 +31,43 @@ namespace BacklogMaintainer.ViewModel
 			}
 		}
 #endregion
+#region 全ユーザー数
+		/// <summary>
+		/// 全ユーザー数
+		/// </summary>
+		private int _userCount;
+		public int UserCount
+		{
+			get { return this._userCount; }
+			set 
+			{ 
+				if ( this._userCount == value ) {
+					return;
+				}
+				this._userCount = value; 
+				
+				this.RaisePropertyChanged(() => this.UserCount);
+			}
+		}
+#endregion
+#region 全グループ数
+		/// <summary>
+		/// 全グループ数
+		/// </summary>
+		private int _groupCount;
+		public int GroupCount
+		{
+			get { return this._groupCount; }
+			set 
+			{ 
+				if ( this._groupCount == value ) {
+					return;
+				}
+				this._groupCount = value; 
+				
+				this.RaisePropertyChanged(() => this.GroupCount);
+			}
+		}
+#endregion
 	}
 }

@@ -31,9 +31,9 @@ namespace BacklogMaintainer.ViewModel
 			}
 		}
 #endregion
-#region 全ユーザー数
+#region ユーザー数
 		/// <summary>
-		/// 全ユーザー数
+		/// ユーザー数
 		/// </summary>
 		private int _userCount;
 		public int UserCount
@@ -50,9 +50,9 @@ namespace BacklogMaintainer.ViewModel
 			}
 		}
 #endregion
-#region 全グループ数
+#region グループ数
 		/// <summary>
-		/// 全グループ数
+		/// グループ数
 		/// </summary>
 		private int _groupCount;
 		public int GroupCount
@@ -66,6 +66,44 @@ namespace BacklogMaintainer.ViewModel
 				this._groupCount = value; 
 				
 				this.RaisePropertyChanged(() => this.GroupCount);
+			}
+		}
+#endregion
+#region プロジェクト数
+		/// <summary>
+		/// プロジェクト数
+		/// </summary>
+		private int _projectCount;
+		public int ProjectCount
+		{
+			get { return this._projectCount; }
+			set 
+			{ 
+				if ( this._projectCount == value ) {
+					return;
+				}
+				this._projectCount = value; 
+				
+				this.RaisePropertyChanged(() => this.ProjectCount);
+			}
+		}
+#endregion
+#region 非アーカイブプロジェクト数
+		/// <summary>
+		/// 非アーカイブプロジェクト数
+		/// </summary>
+		private int _activeProjectCount;
+		public int ActiveProjectCount
+		{
+			get { return this._activeProjectCount; }
+			set 
+			{ 
+				if ( this._activeProjectCount == value ) {
+					return;
+				}
+				this._activeProjectCount = value; 
+				
+				this.RaisePropertyChanged(() => this.ActiveProjectCount);
 			}
 		}
 #endregion

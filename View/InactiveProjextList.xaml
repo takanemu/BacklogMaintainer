@@ -12,10 +12,17 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Label Margin="5,0"
-               HorizontalAlignment="Left"
-               VerticalAlignment="Center"
-               Content="直近1ヶ月にアクセスの無いプロジェクト" />
+        <Grid Margin="5,0">
+            <Label HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Content="直近1ヶ月にアクセスの無いプロジェクト" />
+            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center">
+                プロジェクト<Run Text="{Binding ProjectCount}" />
+                個<LineBreak/>
+                アクティブプロジェクト<Run Text="{Binding ActiveProjectCount}" />
+                個
+            </TextBlock>
+        </Grid>
         <DataGrid x:Name="AzureDataGrid"
                   Grid.Row="1"
                   Margin="5"

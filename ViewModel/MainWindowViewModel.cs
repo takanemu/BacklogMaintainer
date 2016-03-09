@@ -12,8 +12,10 @@ namespace BacklogMaintainer.ViewModel
     using System.Threading.Tasks;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
-    [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "全ユーザー数", RaisePropertyChanged = true)]
-    [TemplateGenerateAnnotation(Name = "GroupCount", Type = typeof(int), Comment = "全グループ数", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "ユーザー数", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "GroupCount", Type = typeof(int), Comment = "グループ数", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "ProjectCount", Type = typeof(int), Comment = "プロジェクト数", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "ActiveProjectCount", Type = typeof(int), Comment = "非アーカイブプロジェクト数", RaisePropertyChanged = true)]
     public partial class MainWindowViewModel : Livet.ViewModel
     {
         public string SpaceName { get; set; }
@@ -60,6 +62,9 @@ namespace BacklogMaintainer.ViewModel
             // プロジェクト登録数カウント
             var projects = await this.GetProjects();
             var projectCommunicator = new ProjectCommunicator(this.SpaceName, this.APIKey);
+
+            this.ProjectCount = projects.Count();
+            this.ActiveProjectCount = projects.Count(o => o.Archived == false);
 
             foreach (var project in projects)
             {

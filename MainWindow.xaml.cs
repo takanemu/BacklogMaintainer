@@ -2,7 +2,9 @@
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Linq;
 
 namespace BacklogMaintainer
 {
@@ -45,7 +47,8 @@ namespace BacklogMaintainer
                     this._viewModel.SpaceName = result.Username;
                     this._viewModel.APIKey = result.Password;
                     this._viewModel.IsBusy = true;
-                    await this._viewModel.DoLoad();
+                    this._viewModel.Init();
+                    await this._viewModel.Update();
                     this._viewModel.IsBusy = false;
                 }
             };
@@ -68,7 +71,8 @@ namespace BacklogMaintainer
         private async void Refresh(object sender, RoutedEventArgs e)
         {
             this._viewModel.IsBusy = true;
-            await this._viewModel.DoLoad();
+            this._viewModel.Refresh();
+            await this._viewModel.Update();
             this._viewModel.IsBusy = false;
             this.ToggleFlyout(0);
         }
@@ -82,6 +86,5 @@ namespace BacklogMaintainer
             }
             flyout.IsOpen = !flyout.IsOpen;
         }
-
     }
 }

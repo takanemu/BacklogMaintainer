@@ -3,6 +3,7 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                      xmlns:commands="clr-namespace:BacklogMaintainer.Commands"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -67,6 +68,12 @@
 
     <Grid>
         <Controls:MetroAnimatedSingleRowTabControl>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <commands:EventToCommand Command="{Binding SelectionChangedCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
             <TabItem Header="users">
                 <view:UserList />
             </TabItem>

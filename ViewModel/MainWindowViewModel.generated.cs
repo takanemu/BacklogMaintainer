@@ -107,5 +107,24 @@ namespace BacklogMaintainer.ViewModel
 			}
 		}
 #endregion
+#region タブ選択変更
+		/// <summary>
+		/// タブ選択変更
+		/// </summary>
+		private Livet.Commands.ListenerCommand<System.Windows.Controls.SelectionChangedEventArgs> _selectionChangedCommand;
+
+		public Livet.Commands.ListenerCommand<System.Windows.Controls.SelectionChangedEventArgs> SelectionChangedCommand
+		{
+			get
+			{
+				if (this._selectionChangedCommand == null)
+				{
+					this._selectionChangedCommand = new Livet.Commands.ListenerCommand<System.Windows.Controls.SelectionChangedEventArgs>(this.SelectionChanged);
+				}
+				return this._selectionChangedCommand;
+			}
+		}
+		//private void SelectionChanged(System.Windows.Controls.SelectionChangedEventArgs message) {}
+#endregion
 	}
 }

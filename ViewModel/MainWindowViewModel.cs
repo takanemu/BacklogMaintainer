@@ -13,6 +13,7 @@ namespace BacklogMaintainer.ViewModel
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using System.Windows;
+    using System.Windows.Data;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "ユーザー数", RaisePropertyChanged = true)]
@@ -51,6 +52,13 @@ namespace BacklogMaintainer.ViewModel
             this.InactiveProjexts = new ObservableCollection<Project>();
             this.RevivalProjexts = new ObservableCollection<Project>();
             this.DeathProjexts = new ObservableCollection<Project>();
+
+            // 複数スレッドからコレクションを操作できるようにする
+            BindingOperations.EnableCollectionSynchronization(this.Users, new object());
+            BindingOperations.EnableCollectionSynchronization(this.Groups, new object());
+            BindingOperations.EnableCollectionSynchronization(this.InactiveProjexts, new object());
+            BindingOperations.EnableCollectionSynchronization(this.RevivalProjexts, new object());
+            BindingOperations.EnableCollectionSynchronization(this.DeathProjexts, new object());
         }
 
         /// <summary>
@@ -176,10 +184,7 @@ namespace BacklogMaintainer.ViewModel
             if (this.isUser)
             {
                 // 初期化
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.Users.Clear();
-                });
+                this.Users.Clear();
                 // ユーザーデータ取得
                 var users = await this.GetSpaceUsers();
                 var userdic = new Dictionary<string, User>();
@@ -231,10 +236,7 @@ namespace BacklogMaintainer.ViewModel
                                     Name = zerouser.Name,
                                     Memo = "未登録",
                                 };
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    this.Users.Add(adduser);
-                                });
+                                this.Users.Add(adduser);
                             }
                         }
                     }
@@ -248,10 +250,7 @@ namespace BacklogMaintainer.ViewModel
                     Name = user.Name,
                     Memo = "重複登録",
                 });
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.Users.Concat(users);
-                });
+                this.Users.Concat(users);
                 this.isUser = false;
             }
         }
@@ -260,19 +259,13 @@ namespace BacklogMaintainer.ViewModel
         {
             if(this.isGroup)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.Groups.Clear();
-                });
+                this.Groups.Clear();
                 var groups = await this.GetSpageGroups();
 
                 this.GroupCount = groups.Count();
                 groups = groups.Where(o => o.Members.Count == 0);
 
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.Groups = groups.ToList();
-                });
+                this.Groups = groups.ToList();
                 this.isGroup = false;
             }
         }
@@ -281,10 +274,8 @@ namespace BacklogMaintainer.ViewModel
         {
             if(this.isInactive)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.InactiveProjexts.Clear();
-                });
+                this.InactiveProjexts.Clear();
+
                 var update = new Dictionary<string, IEnumerable<Activitie>>();
                 await this.Project();
                 var date = DateTime.Now.AddMonths(-1);
@@ -314,10 +305,7 @@ namespace BacklogMaintainer.ViewModel
                     }
                     if (!work)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            this.InactiveProjexts.Add(project);
-                        });
+                        this.InactiveProjexts.Add(project);
                         //if (activities.Count() > 1)
                         //{
                         //    Console.WriteLine(activities.First());
@@ -332,10 +320,8 @@ namespace BacklogMaintainer.ViewModel
         {
             if(this.isRevival)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.RevivalProjexts.Clear();
-                });
+                this.RevivalProjexts.Clear();
+
                 var date = DateTime.Now.AddMonths(-1);
                 var update = new Dictionary<string, IEnumerable<Activitie>>();
 
@@ -364,10 +350,7 @@ namespace BacklogMaintainer.ViewModel
                         }
                         if (work)
                         {
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                this.RevivalProjexts.Add(project);
-                            });
+                            this.RevivalProjexts.Add(project);
                             //if (activities.Count() > 1)
                             //{
                             //    Console.WriteLine(activities.First());
@@ -383,10 +366,8 @@ namespace BacklogMaintainer.ViewModel
         {
             if(this.isDeath)
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    this.DeathProjexts.Clear();
-                });
+                this.DeathProjexts.Clear();
+
                 var date = DateTime.Now.AddYears(-1);
                 var update = new Dictionary<string, IEnumerable<Activitie>>();
 
@@ -413,10 +394,7 @@ namespace BacklogMaintainer.ViewModel
                     }
                     if (!work)
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            this.DeathProjexts.Add(project);
-                        });
+                        this.DeathProjexts.Add(project);
                         //if (activities.Count() > 1)
                         //{
                         //    Console.WriteLine(activities.First());

@@ -20,8 +20,9 @@
                   Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=RevivalProjexts}"
+                  ItemsSource="{Binding Path=RevivalProjextsView}"
                   RenderOptions.ClearTypeHint="Enabled"
+                  SelectionMode="Single"
                   Style="{DynamicResource AzureDataGrid}"
                   TextOptions.TextFormattingMode="Display">
             <DataGrid.Columns>

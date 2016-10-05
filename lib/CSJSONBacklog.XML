@@ -52,7 +52,13 @@
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-priorities"/>
         </member>
-        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectList">
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectList(System.Boolean)">
+            <summary>
+            Returns list of projects.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-projects"/>
+        </member>
+        <member name="M:CSJSONBacklog.API.IProjectAPI.GetProjectList(System.Boolean,System.Boolean)">
             <summary>
             Returns list of projects.
             </summary>
@@ -220,11 +226,21 @@
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-priorities"/>
         </member>
-        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectList">
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectList(System.Boolean)">
             <summary>
             Returns list of projects.
             </summary>
-            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-projects"/>
+            <param name="archived"></param>
+            <param name="all"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProjectList(System.Boolean,System.Boolean)">
+            <summary>
+            Returns list of projects.
+            </summary>
+            <param name="archived"></param>
+            <param name="all"></param>
+            <returns></returns>
         </member>
         <member name="M:CSJSONBacklog.Communicator.ProjectCommunicator.GetProject(System.String)">
             <summary>
@@ -419,6 +435,37 @@
             Status
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-status"/>
+        </member>
+        <member name="T:CSJSONBacklog.Model.Projects.ActivityQuery">
+            <summary>
+            Query Parameters - Get Project Recent Updates
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-project-activities"/>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Projects.ActivityQuery.activitieTypes">
+            <summary>
+            number of activity TypeId list to type(1-17)
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Projects.ActivityQuery.minId">
+            <summary>
+            minimum ID
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Projects.ActivityQuery.maxId">
+            <summary>
+            maximum ID
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Projects.ActivityQuery.count">
+            <summary>
+            number of records to retrieve(1-100) default=20
+            </summary>
+        </member>
+        <member name="P:CSJSONBacklog.Model.Projects.ActivityQuery.order">
+            <summary>
+            "asc" or "desc" default="desc"
+            </summary>
         </member>
         <member name="M:CSJSONBacklog.Model.Projects.CustomFieldItem.PatchPropertyNames">
             <summary>

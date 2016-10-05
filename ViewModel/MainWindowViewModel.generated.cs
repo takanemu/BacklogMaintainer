@@ -126,5 +126,23 @@ namespace BacklogMaintainer.ViewModel
 		}
 		//private void SelectionChanged(System.Windows.Controls.SelectionChangedEventArgs message) {}
 #endregion
+#region 添付ファイルのダウンロード
+		/// <summary>
+		/// 添付ファイルのダウンロード
+		/// </summary>
+		private Livet.Commands.ViewModelCommand _downloadCommand;
+
+		public Livet.Commands.ViewModelCommand DownloadCommand
+		{
+			get
+			{
+				if (this._downloadCommand == null)
+				{
+					this._downloadCommand = new Livet.Commands.ViewModelCommand(this.Download);
+				}
+				return this._downloadCommand;
+			}
+		}
+#endregion
 	}
 }

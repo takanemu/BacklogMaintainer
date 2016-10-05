@@ -18,17 +18,18 @@
                    Content="直近1ヶ月にアクセスの無いプロジェクト" />
             <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center">
                 プロジェクト<Run Text="{Binding ProjectCount}" />
-                個<LineBreak/>
-                アクティブプロジェクト<Run Text="{Binding ActiveProjectCount}" />
                 個
-            </TextBlock>
+                <LineBreak />
+                アクティブプロジェクト<Run Text="{Binding ActiveProjectCount}" />
+                個</TextBlock>
         </Grid>
         <DataGrid x:Name="AzureDataGrid"
                   Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=InactiveProjexts}"
+                  ItemsSource="{Binding Path=InactiveProjextsView}"
                   RenderOptions.ClearTypeHint="Enabled"
+                  SelectionMode="Single"
                   Style="{DynamicResource AzureDataGrid}"
                   TextOptions.TextFormattingMode="Display">
             <DataGrid.Columns>

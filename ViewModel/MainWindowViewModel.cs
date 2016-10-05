@@ -14,6 +14,8 @@ namespace BacklogMaintainer.ViewModel
     using System.Windows.Controls;
     using System.Windows;
     using System.Windows.Data;
+    using System.Windows.Controls.Primitives;
+    using System.ComponentModel;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "ユーザー数", RaisePropertyChanged = true)]
@@ -21,6 +23,7 @@ namespace BacklogMaintainer.ViewModel
     [TemplateGenerateAnnotation(Name = "ProjectCount", Type = typeof(int), Comment = "プロジェクト数", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "ActiveProjectCount", Type = typeof(int), Comment = "非アーカイブプロジェクト数", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Kind = "Command", Name = "SelectionChanged", Comment = "タブ選択変更", CommandParameter = typeof(System.Windows.Controls.SelectionChangedEventArgs))]
+    [TemplateGenerateAnnotation(Kind = "Command", Name = "Download", Comment = "添付ファイルのダウンロード")]
     public partial class MainWindowViewModel : Livet.ViewModel
     {
         public string SpaceName { get; set; }
@@ -30,6 +33,9 @@ namespace BacklogMaintainer.ViewModel
         public IList<Project> InactiveProjexts { get; private set; }
         public IList<Project> RevivalProjexts { get; private set; }
         public IList<Project> DeathProjexts { get; private set; }
+        private CollectionViewSource inactiveProjextsCollectionViewSource = new CollectionViewSource();
+        private CollectionViewSource revivalProjextsCollectionViewSource = new CollectionViewSource();
+        private CollectionViewSource deathProjextsCollectionViewSource = new CollectionViewSource();
         private bool isProject = true;
         private bool isUser = true;
         private bool isGroup = true;
@@ -59,6 +65,10 @@ namespace BacklogMaintainer.ViewModel
             BindingOperations.EnableCollectionSynchronization(this.InactiveProjexts, new object());
             BindingOperations.EnableCollectionSynchronization(this.RevivalProjexts, new object());
             BindingOperations.EnableCollectionSynchronization(this.DeathProjexts, new object());
+
+            this.inactiveProjextsCollectionViewSource.Source = this.InactiveProjexts;
+            this.revivalProjextsCollectionViewSource.Source = this.RevivalProjexts;
+            this.deathProjextsCollectionViewSource.Source = this.DeathProjexts;
         }
 
         /// <summary>
@@ -124,7 +134,7 @@ namespace BacklogMaintainer.ViewModel
 
             await Task.Run(() =>
             {
-                projects = projectCommunicator.GetProjectList().ToList();
+                projects = projectCommunicator.GetProjectList(true).ToList();
             });
             return projects;
         }
@@ -166,6 +176,39 @@ namespace BacklogMaintainer.ViewModel
             this.isRevival = true;
             this.isDeath = true;
             this.projectActivities.Clear();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollectionView InactiveProjextsView
+        {
+            get
+            {
+                return this.inactiveProjextsCollectionViewSource.View;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollectionView RevivalProjextsView
+        {
+            get
+            {
+                return this.revivalProjextsCollectionViewSource.View;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollectionView DeathProjextsView
+        {
+            get
+            {
+                return this.deathProjextsCollectionViewSource.View;
+            }
         }
 
         public async Task Project()
@@ -457,6 +500,31 @@ namespace BacklogMaintainer.ViewModel
                     });
                 }
             }
-       }
+        }
+
+        /// <summary>
+        /// 添付ファイルのダウンロード処理
+        /// </summary>
+        private void Download()
+        {
+            Project selectedItem = null;
+
+            switch (this.selected)
+            {
+                case "inactive":
+                    selectedItem = this.InactiveProjextsView.CurrentItem as Project;
+                    break;
+                case "revival":
+                    selectedItem = this.RevivalProjextsView.CurrentItem as Project;
+                    break;
+                case "death":
+                    selectedItem = this.DeathProjextsView.CurrentItem as Project;
+                    break;
+            }
+            if(selectedItem != null)
+            {
+
+            }
+        }
     }
 }

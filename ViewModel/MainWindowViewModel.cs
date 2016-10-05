@@ -16,6 +16,7 @@ namespace BacklogMaintainer.ViewModel
     using System.Windows.Data;
     using System.Windows.Controls.Primitives;
     using System.ComponentModel;
+    using CSJSONBacklog.Model.Issues;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "ユーザー数", RaisePropertyChanged = true)]
@@ -505,8 +506,10 @@ namespace BacklogMaintainer.ViewModel
         /// <summary>
         /// 添付ファイルのダウンロード処理
         /// </summary>
-        private void Download()
+        private async void Download()
         {
+            this.IsBusy = true;
+
             Project selectedItem = null;
 
             switch (this.selected)
@@ -521,10 +524,58 @@ namespace BacklogMaintainer.ViewModel
                     selectedItem = this.DeathProjextsView.CurrentItem as Project;
                     break;
             }
-            if(selectedItem != null)
+            await Task.Run(() =>
             {
+                if (selectedItem != null)
+                {
+                    IssueCommunicator issue = new IssueCommunicator(this.SpaceName, this.APIKey);
+                    var count = issue.GetIssuesCount(selectedItem.Id);
 
-            }
+                    if (count > 0)
+                    {
+                        int index = 0;
+                        int down = 100;
+                        IEnumerable<Issue> list = new List<Issue>();
+
+                        do
+                        {
+                            var param = new IssueQuery
+                            {
+                                ProjectIds = new List<int> { selectedItem.Id, },
+                                ParentChild = 0,
+                                Attachment = true,
+                                SharedFile = false,
+                                Sort = Sort.Attachment,
+                                Offset = index,
+                                Count = 100,
+                            };
+                            var issues = issue.GetIssues(param);
+
+                            list = list.Concat(issues);
+                            down = issues.Count();
+                            index += down;
+                        }
+                        while (down >= 100);
+
+                        foreach(var item in list)
+                        {
+                            if(item.attachments.Count > 0)
+                            {
+                                foreach(var file in item.attachments)
+                                {
+                                    var path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                                    var key = item.issueKey;
+                                    var name = file.name;
+
+                                    issue.DownloadAttachmentFile(path, key, name, item.id, file.id);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            this.IsBusy = false;
         }
     }
 }

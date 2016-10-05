@@ -34,6 +34,12 @@
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-comments"/>
         </member>
+        <member name="M:CSJSONBacklog.API.IIssueAPI.DownloadAttachmentFile(System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Download issue attachment file.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issue-attachment"/>
+        </member>
         <member name="M:CSJSONBacklog.API.IIssueAPI.GetStatusList">
             <summary>
             Returns list of statuses.
@@ -207,6 +213,12 @@
             Returns list of comments in issue.
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-comments"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.DownloadAttachmentFile(System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Download issue attachment file.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/get-issue-attachment"/>
         </member>
         <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetStatusList">
             <summary>

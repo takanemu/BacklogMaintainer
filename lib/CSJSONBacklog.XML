@@ -172,6 +172,12 @@
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/v2/groups"/>
         </member>
+        <member name="M:CSJSONBacklog.API.ISpaceAPI.DeleteUser(System.Int32)">
+            <summary>
+            Deletes user from the space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/delete-user"/>
+        </member>
         <member name="M:CSJSONBacklog.Communicator.IssueCommunicator.GetIssuesCount(System.Int32)">
             <summary>
             Returns number of issues.
@@ -361,6 +367,12 @@
             Returns list of groups in your space.
             </summary>
             <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/v2/groups"/>
+        </member>
+        <member name="M:CSJSONBacklog.Communicator.SpaceCommunicator.DeleteUser(System.Int32)">
+            <summary>
+            Deletes user from the space.
+            </summary>
+            <see cref="!:http://developer.nulab-inc.com/docs/backlog/api/2/delete-user"/>
         </member>
         <member name="M:CSJSONBacklog.Model.Extensions.EnumerableEqualityExtension.ScrambledEquals``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
             <summary>

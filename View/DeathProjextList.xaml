@@ -16,8 +16,7 @@
                HorizontalAlignment="Left"
                VerticalAlignment="Center"
                Content="1年間にアクセスの無いプロジェクト" />
-        <DataGrid x:Name="AzureDataGrid"
-                  Grid.Row="1"
+        <DataGrid Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=DeathProjextsView}"

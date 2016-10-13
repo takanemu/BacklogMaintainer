@@ -107,6 +107,44 @@ namespace BacklogMaintainer.ViewModel
 			}
 		}
 #endregion
+#region 削除ボタン表示
+		/// <summary>
+		/// 削除ボタン表示
+		/// </summary>
+		private bool _isDeleteButtonDisp;
+		public bool IsDeleteButtonDisp
+		{
+			get { return this._isDeleteButtonDisp; }
+			set 
+			{ 
+				if ( this._isDeleteButtonDisp == value ) {
+					return;
+				}
+				this._isDeleteButtonDisp = value; 
+				
+				this.RaisePropertyChanged(() => this.IsDeleteButtonDisp);
+			}
+		}
+#endregion
+#region ダウンロードボタン表示
+		/// <summary>
+		/// ダウンロードボタン表示
+		/// </summary>
+		private bool _isDownloadButtonDisp;
+		public bool IsDownloadButtonDisp
+		{
+			get { return this._isDownloadButtonDisp; }
+			set 
+			{ 
+				if ( this._isDownloadButtonDisp == value ) {
+					return;
+				}
+				this._isDownloadButtonDisp = value; 
+				
+				this.RaisePropertyChanged(() => this.IsDownloadButtonDisp);
+			}
+		}
+#endregion
 #region タブ選択変更
 		/// <summary>
 		/// タブ選択変更
@@ -141,6 +179,24 @@ namespace BacklogMaintainer.ViewModel
 					this._downloadCommand = new Livet.Commands.ViewModelCommand(this.Download);
 				}
 				return this._downloadCommand;
+			}
+		}
+#endregion
+#region 削除
+		/// <summary>
+		/// 削除
+		/// </summary>
+		private Livet.Commands.ViewModelCommand _deleteCommand;
+
+		public Livet.Commands.ViewModelCommand DeleteCommand
+		{
+			get
+			{
+				if (this._deleteCommand == null)
+				{
+					this._deleteCommand = new Livet.Commands.ViewModelCommand(this.Delete);
+				}
+				return this._deleteCommand;
 			}
 		}
 #endregion

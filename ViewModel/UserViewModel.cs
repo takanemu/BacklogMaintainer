@@ -9,6 +9,7 @@ namespace BacklogMaintainer.ViewModel
 {
     public class UserViewModel : User
     {
+        public bool IsSelected { get; set; }
         public string Memo { get; set; }
     }
 }

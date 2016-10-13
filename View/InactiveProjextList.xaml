@@ -23,8 +23,7 @@
                 アクティブプロジェクト<Run Text="{Binding ActiveProjectCount}" />
                 個</TextBlock>
         </Grid>
-        <DataGrid x:Name="AzureDataGrid"
-                  Grid.Row="1"
+        <DataGrid Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=InactiveProjextsView}"

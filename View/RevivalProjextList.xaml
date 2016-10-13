@@ -16,8 +16,7 @@
                HorizontalAlignment="Left"
                VerticalAlignment="Center"
                Content="アーカイブ化されているのに、最近アクセスの有ったプロジェクト" />
-        <DataGrid x:Name="AzureDataGrid"
-                  Grid.Row="1"
+        <DataGrid Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=RevivalProjextsView}"

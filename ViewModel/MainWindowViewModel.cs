@@ -23,8 +23,11 @@ namespace BacklogMaintainer.ViewModel
     [TemplateGenerateAnnotation(Name = "GroupCount", Type = typeof(int), Comment = "グループ数", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "ProjectCount", Type = typeof(int), Comment = "プロジェクト数", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "ActiveProjectCount", Type = typeof(int), Comment = "非アーカイブプロジェクト数", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "IsDeleteButtonDisp", Type = typeof(bool), Comment = "削除ボタン表示", RaisePropertyChanged = true)]
+    [TemplateGenerateAnnotation(Name = "IsDownloadButtonDisp", Type = typeof(bool), Comment = "ダウンロードボタン表示", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Kind = "Command", Name = "SelectionChanged", Comment = "タブ選択変更", CommandParameter = typeof(System.Windows.Controls.SelectionChangedEventArgs))]
     [TemplateGenerateAnnotation(Kind = "Command", Name = "Download", Comment = "添付ファイルのダウンロード")]
+    [TemplateGenerateAnnotation(Kind = "Command", Name = "Delete", Comment = "削除")]
     public partial class MainWindowViewModel : Livet.ViewModel
     {
         public string SpaceName { get; set; }
@@ -34,6 +37,7 @@ namespace BacklogMaintainer.ViewModel
         public IList<Project> InactiveProjexts { get; private set; }
         public IList<Project> RevivalProjexts { get; private set; }
         public IList<Project> DeathProjexts { get; private set; }
+        private CollectionViewSource usersCollectionViewSource = new CollectionViewSource();
         private CollectionViewSource inactiveProjextsCollectionViewSource = new CollectionViewSource();
         private CollectionViewSource revivalProjextsCollectionViewSource = new CollectionViewSource();
         private CollectionViewSource deathProjextsCollectionViewSource = new CollectionViewSource();
@@ -54,6 +58,8 @@ namespace BacklogMaintainer.ViewModel
         public MainWindowViewModel()
         {
             this.IsBusy = false;
+            this.IsDeleteButtonDisp = false;
+            this.IsDownloadButtonDisp = false;
             this.Users = new ObservableCollection<UserViewModel>();
             this.Groups = new ObservableCollection<Group>();
             this.InactiveProjexts = new ObservableCollection<Project>();
@@ -67,6 +73,7 @@ namespace BacklogMaintainer.ViewModel
             BindingOperations.EnableCollectionSynchronization(this.RevivalProjexts, new object());
             BindingOperations.EnableCollectionSynchronization(this.DeathProjexts, new object());
 
+            this.usersCollectionViewSource.Source = this.Users;
             this.inactiveProjextsCollectionViewSource.Source = this.InactiveProjexts;
             this.revivalProjextsCollectionViewSource.Source = this.RevivalProjexts;
             this.deathProjextsCollectionViewSource.Source = this.DeathProjexts;
@@ -182,6 +189,17 @@ namespace BacklogMaintainer.ViewModel
         /// <summary>
         /// 
         /// </summary>
+        public ICollectionView UsersView
+        {
+            get
+            {
+                return this.usersCollectionViewSource.View;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public ICollectionView InactiveProjextsView
         {
             get
@@ -223,6 +241,10 @@ namespace BacklogMaintainer.ViewModel
             }
         }
 
+        /// <summary>
+        /// ユーザー一覧作成
+        /// </summary>
+        /// <returns></returns>
         public async Task User()
         {
             if (this.isUser)
@@ -275,6 +297,7 @@ namespace BacklogMaintainer.ViewModel
                             {
                                 var adduser = new UserViewModel
                                 {
+                                    Id = user.Id,
                                     UserId = zerouser.UserId,
                                     MailAddress = zerouser.MailAddress,
                                     Name = zerouser.Name,
@@ -289,6 +312,7 @@ namespace BacklogMaintainer.ViewModel
                 // 重複ユーザーの検出
                 users = users.Where(user => users.Count(o => o.MailAddress == user.MailAddress) > 1).Select(user => new UserViewModel
                 {
+                    Id = user.Id,
                     UserId = user.UserId,
                     MailAddress = user.MailAddress,
                     Name = user.Name,
@@ -299,6 +323,10 @@ namespace BacklogMaintainer.ViewModel
             }
         }
 
+        /// <summary>
+        /// グループ一覧作成
+        /// </summary>
+        /// <returns></returns>
         public async Task Group()
         {
             if(this.isGroup)
@@ -309,7 +337,10 @@ namespace BacklogMaintainer.ViewModel
                 this.GroupCount = groups.Count();
                 groups = groups.Where(o => o.Members.Count == 0);
 
-                this.Groups = groups.ToList();
+                foreach(var group in groups)
+                {
+                    this.Groups.Add(group);
+                }
                 this.isGroup = false;
             }
         }
@@ -458,18 +489,28 @@ namespace BacklogMaintainer.ViewModel
                 {
                     case "users":
                         await this.User();
+                        this.IsDeleteButtonDisp = true;
+                        this.IsDownloadButtonDisp = false;
                         break;
                     case "groups":
                         await this.Group();
+                        this.IsDeleteButtonDisp = false;
+                        this.IsDownloadButtonDisp = false;
                         break;
                     case "inactive":
                         await this.Inactive();
+                        this.IsDeleteButtonDisp = false;
+                        this.IsDownloadButtonDisp = true;
                         break;
                     case "revival":
                         await this.Revival();
+                        this.IsDeleteButtonDisp = false;
+                        this.IsDownloadButtonDisp = true;
                         break;
                     case "death":
                         await this.Death();
+                        this.IsDeleteButtonDisp = false;
+                        this.IsDownloadButtonDisp = true;
                         break;
                 }
             }
@@ -576,6 +617,33 @@ namespace BacklogMaintainer.ViewModel
             });
 
             this.IsBusy = false;
+        }
+
+        /// <summary>
+        /// 削除機能
+        /// </summary>
+        private async void Delete()
+        {
+            var selected = this.Users.Where(x => x.IsSelected).ToList();
+
+            if(selected.Count() > 0)
+            {
+                this.IsBusy = true;
+
+                var spaceCommunicator = new SpaceCommunicator(this.SpaceName, this.APIKey);
+
+                await Task.Run(() =>
+                {
+                    foreach(var user in selected)
+                    {
+                        // ユーザー削除
+                        spaceCommunicator.DeleteUser(user.Id);
+                        // リストから削除
+                        this.Users.Remove(user);
+                    }
+                });
+                this.IsBusy = false;
+            }
         }
     }
 }

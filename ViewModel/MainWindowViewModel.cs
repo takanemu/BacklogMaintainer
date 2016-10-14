@@ -17,6 +17,9 @@ namespace BacklogMaintainer.ViewModel
     using System.Windows.Controls.Primitives;
     using System.ComponentModel;
     using CSJSONBacklog.Model.Issues;
+    using Livet.Messaging;
+    using Messaging;
+    using MahApps.Metro.Controls.Dialogs;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "ユーザー数", RaisePropertyChanged = true)]
@@ -637,22 +640,42 @@ namespace BacklogMaintainer.ViewModel
         /// <summary>
         /// 削除機能
         /// </summary>
-        private async void Delete()
+        private void Delete()
         {
             if (this.selected == "users")
             {
-                this.UserDelete();
+                var message = new MetroWindowConfirmationMessage("ユーザーを削除してよろしいですか？", "削除確認", MessageDialogStyle.AffirmativeAndNegative,
+                    async (MessageDialogResult result) =>
+                    {
+                        if(result == MessageDialogResult.Affirmative)
+                        {
+                            await this.UserDelete();
+                        }
+                    },
+                    "Confirm");
+                
+                Messenger.GetResponse(message);
             }
             else if (this.selected == "groups")
             {
-                this.GroupDelete();
+                var message = new MetroWindowConfirmationMessage("グループを削除してよろしいですか？", "削除確認", MessageDialogStyle.AffirmativeAndNegative,
+                    async (MessageDialogResult result) =>
+                    {
+                        if (result == MessageDialogResult.Affirmative)
+                        {
+                            await this.GroupDelete();
+                        }
+                    },
+                    "Confirm");
+
+                Messenger.GetResponse(message);
             }
         }
 
         /// <summary>
         /// ユーザー削除
         /// </summary>
-        private async void UserDelete()
+        private async Task UserDelete()
         {
             var selected = this.Users.Where(x => x.IsSelected).ToList();
 
@@ -679,7 +702,7 @@ namespace BacklogMaintainer.ViewModel
         /// <summary>
         /// グループ削除
         /// </summary>
-        private async void GroupDelete()
+        private async Task GroupDelete()
         {
             var selected = this.Groups.Where(x => x.IsSelected).ToList();
 

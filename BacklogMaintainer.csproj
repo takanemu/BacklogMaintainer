@@ -93,8 +93,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\Messaging\MetroWindowConfirmationDialogInteractionMessageAction.cs" />
     <Compile Include="Commands\EventToCommand.cs" />
     <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Messaging\MetroWindowConfirmationMessage.cs" />
     <Compile Include="T4\DesigntimeSourcecodeGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,12 +1,9 @@
-﻿using CSJSONBacklog.Model.Space;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BacklogMaintainer.ViewModel
 {
+    using CSJSONBacklog.Model.Space;
+    using System.Collections.Generic;
+
     public class GroupViewModel : Group
     {
         public GroupViewModel(Group group)

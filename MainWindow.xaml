@@ -12,6 +12,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:view="clr-namespace:BacklogMaintainer.View"
                       xmlns:vm="clr-namespace:BacklogMaintainer.ViewModel"
+                      xmlns:ma="clr-namespace:BacklogMaintainer.Behaviors.Messaging"
                       Title="Backlog Maintainer"
                       Width="960"
                       Height="600"
@@ -25,6 +26,12 @@
                       WindowStartupLocation="CenterScreen"
                       mc:Ignorable="d">
 
+    <i:Interaction.Triggers>
+        <l:InteractionMessageTrigger MessageKey="Confirm" Messenger="{Binding Messenger}" >
+            <ma:MetroWindowConfirmationDialogInteractionMessageAction />
+        </l:InteractionMessageTrigger>
+    </i:Interaction.Triggers>
+    
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl x:Name="flyoutsControl">
             <Controls:Flyout Position="Bottom" TitleVisibility="Collapsed">

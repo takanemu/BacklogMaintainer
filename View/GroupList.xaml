@@ -6,6 +6,15 @@
              d:DesignHeight="300"
              d:DesignWidth="300"
              mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style x:Key="AzureDataGridRowSelected"
+               BasedOn="{StaticResource AzureDataGridRow}"
+               TargetType="{x:Type DataGridRow}">
+            <Setter Property="DataGridRow.IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
@@ -18,14 +27,14 @@
                    Content="メンバーの居ないグループ" />
             <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center">
                 グループ<Run Text="{Binding GroupCount}" />
-                個
-            </TextBlock>
+                個</TextBlock>
         </Grid>
         <DataGrid Grid.Row="1"
                   Margin="5"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Groups}"
+                  ItemsSource="{Binding GroupsView}"
                   RenderOptions.ClearTypeHint="Enabled"
+                  RowStyle="{StaticResource AzureDataGridRowSelected}"
                   Style="{DynamicResource AzureDataGrid}"
                   TextOptions.TextFormattingMode="Display">
             <DataGrid.Columns>

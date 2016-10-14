@@ -33,11 +33,12 @@ namespace BacklogMaintainer.ViewModel
         public string SpaceName { get; set; }
         public string APIKey { get; set; }
         public IList<UserViewModel> Users { get; private set; }
-        public IList<Group> Groups { get; private set; }
+        public IList<GroupViewModel> Groups { get; private set; }
         public IList<Project> InactiveProjexts { get; private set; }
         public IList<Project> RevivalProjexts { get; private set; }
         public IList<Project> DeathProjexts { get; private set; }
         private CollectionViewSource usersCollectionViewSource = new CollectionViewSource();
+        private CollectionViewSource groupsCollectionViewSource = new CollectionViewSource();
         private CollectionViewSource inactiveProjextsCollectionViewSource = new CollectionViewSource();
         private CollectionViewSource revivalProjextsCollectionViewSource = new CollectionViewSource();
         private CollectionViewSource deathProjextsCollectionViewSource = new CollectionViewSource();
@@ -61,7 +62,7 @@ namespace BacklogMaintainer.ViewModel
             this.IsDeleteButtonDisp = false;
             this.IsDownloadButtonDisp = false;
             this.Users = new ObservableCollection<UserViewModel>();
-            this.Groups = new ObservableCollection<Group>();
+            this.Groups = new ObservableCollection<GroupViewModel>();
             this.InactiveProjexts = new ObservableCollection<Project>();
             this.RevivalProjexts = new ObservableCollection<Project>();
             this.DeathProjexts = new ObservableCollection<Project>();
@@ -74,6 +75,7 @@ namespace BacklogMaintainer.ViewModel
             BindingOperations.EnableCollectionSynchronization(this.DeathProjexts, new object());
 
             this.usersCollectionViewSource.Source = this.Users;
+            this.groupsCollectionViewSource.Source = this.Groups;
             this.inactiveProjextsCollectionViewSource.Source = this.InactiveProjexts;
             this.revivalProjextsCollectionViewSource.Source = this.RevivalProjexts;
             this.deathProjextsCollectionViewSource.Source = this.DeathProjexts;
@@ -151,21 +153,23 @@ namespace BacklogMaintainer.ViewModel
         /// グループの取得
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Group>> GetSpageGroups()
+        public async Task<IEnumerable<GroupViewModel>> GetSpageGroups()
         {
             var spaceCommunicator = new SpaceCommunicator(this.SpaceName, this.APIKey);
-            IEnumerable<Group> groups = null;
+            IEnumerable<GroupViewModel> groups = null;
 
             await Task.Run(() =>
             {
-                var param = new SpaceQuery {
+                var param = new SpaceQuery
+                {
                     Offset = 0,
                     Order = CSJSONBacklog.Model.Issues.Order.asc,
                     Count = 100,
                 };
                 var quary = param.GetParametersForAPI();
 
-                groups = spaceCommunicator.GetGroupList(param).ToList();
+                groups = spaceCommunicator.GetGroupList(param).Select(x => new GroupViewModel(x)).ToList();
+                //groups = spaceCommunicator.GetGroupList(param).ToList();
             });
             return groups;
         }
@@ -194,6 +198,17 @@ namespace BacklogMaintainer.ViewModel
             get
             {
                 return this.usersCollectionViewSource.View;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ICollectionView GroupsView
+        {
+            get
+            {
+                return this.groupsCollectionViewSource.View;
             }
         }
 
@@ -329,7 +344,7 @@ namespace BacklogMaintainer.ViewModel
         /// <returns></returns>
         public async Task Group()
         {
-            if(this.isGroup)
+            if (this.isGroup)
             {
                 this.Groups.Clear();
                 var groups = await this.GetSpageGroups();
@@ -337,7 +352,7 @@ namespace BacklogMaintainer.ViewModel
                 this.GroupCount = groups.Count();
                 groups = groups.Where(o => o.Members.Count == 0);
 
-                foreach(var group in groups)
+                foreach (var group in groups)
                 {
                     this.Groups.Add(group);
                 }
@@ -347,7 +362,7 @@ namespace BacklogMaintainer.ViewModel
 
         public async Task Inactive()
         {
-            if(this.isInactive)
+            if (this.isInactive)
             {
                 this.InactiveProjexts.Clear();
 
@@ -393,7 +408,7 @@ namespace BacklogMaintainer.ViewModel
 
         public async Task Revival()
         {
-            if(this.isRevival)
+            if (this.isRevival)
             {
                 this.RevivalProjexts.Clear();
 
@@ -439,7 +454,7 @@ namespace BacklogMaintainer.ViewModel
 
         public async Task Death()
         {
-            if(this.isDeath)
+            if (this.isDeath)
             {
                 this.DeathProjexts.Clear();
 
@@ -494,7 +509,7 @@ namespace BacklogMaintainer.ViewModel
                         break;
                     case "groups":
                         await this.Group();
-                        this.IsDeleteButtonDisp = false;
+                        this.IsDeleteButtonDisp = true;
                         this.IsDownloadButtonDisp = false;
                         break;
                     case "inactive":
@@ -514,7 +529,7 @@ namespace BacklogMaintainer.ViewModel
                         break;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
             }
         }
@@ -598,11 +613,11 @@ namespace BacklogMaintainer.ViewModel
                         }
                         while (down >= 100);
 
-                        foreach(var item in list)
+                        foreach (var item in list)
                         {
-                            if(item.attachments.Count > 0)
+                            if (item.attachments.Count > 0)
                             {
-                                foreach(var file in item.attachments)
+                                foreach (var file in item.attachments)
                                 {
                                     var path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                                     var key = item.issueKey;
@@ -624,9 +639,24 @@ namespace BacklogMaintainer.ViewModel
         /// </summary>
         private async void Delete()
         {
+            if (this.selected == "users")
+            {
+                this.UserDelete();
+            }
+            else if (this.selected == "groups")
+            {
+                this.GroupDelete();
+            }
+        }
+
+        /// <summary>
+        /// ユーザー削除
+        /// </summary>
+        private async void UserDelete()
+        {
             var selected = this.Users.Where(x => x.IsSelected).ToList();
 
-            if(selected.Count() > 0)
+            if (selected.Count() > 0)
             {
                 this.IsBusy = true;
 
@@ -634,12 +664,39 @@ namespace BacklogMaintainer.ViewModel
 
                 await Task.Run(() =>
                 {
-                    foreach(var user in selected)
+                    foreach (var user in selected)
                     {
                         // ユーザー削除
                         spaceCommunicator.DeleteUser(user.Id);
                         // リストから削除
                         this.Users.Remove(user);
+                    }
+                });
+                this.IsBusy = false;
+            }
+        }
+
+        /// <summary>
+        /// グループ削除
+        /// </summary>
+        private async void GroupDelete()
+        {
+            var selected = this.Groups.Where(x => x.IsSelected).ToList();
+
+            if (selected.Count() > 0)
+            {
+                this.IsBusy = true;
+
+                var spaceCommunicator = new SpaceCommunicator(this.SpaceName, this.APIKey);
+
+                await Task.Run(() =>
+                {
+                    foreach (var group in selected)
+                    {
+                        // グループ削除
+                        spaceCommunicator.DeleteGroup(group.Id);
+                        // リストから削除
+                        this.Groups.Remove(group);
                     }
                 });
                 this.IsBusy = false;

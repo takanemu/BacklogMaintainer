@@ -20,6 +20,7 @@ namespace BacklogMaintainer.ViewModel
     using Livet.Messaging;
     using Messaging;
     using MahApps.Metro.Controls.Dialogs;
+    using System.IO;
 
     [TemplateGenerateAnnotation(Name = "IsBusy", Type = typeof(bool), Comment = "処理中表示", RaisePropertyChanged = true)]
     [TemplateGenerateAnnotation(Name = "UserCount", Type = typeof(int), Comment = "ユーザー数", RaisePropertyChanged = true)]
@@ -625,7 +626,20 @@ namespace BacklogMaintainer.ViewModel
                                     var path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                                     var key = item.issueKey;
                                     var name = file.name;
+                                    char[] invalidChars = Path.GetInvalidFileNameChars();
 
+                                    if (name.IndexOfAny(invalidChars) < 0)
+                                    {
+                                        //Console.WriteLine("ファイル名に使用できない文字は使われていません。");
+                                    }
+                                    else
+                                    {
+                                        //Console.WriteLine("ファイル名に使用できない文字が使われています。");
+                                        foreach (char c in invalidChars)
+                                        {
+                                            name = name.Replace(c, '_');
+                                        }
+                                    }
                                     issue.DownloadAttachmentFile(path, key, name, item.id, file.id);
                                 }
                             }
